@@ -185,11 +185,12 @@ export class World {
       this.previewAngle += 0.0025;
       const a = Math.sin(this.previewAngle) * 0.6;
       const landscape = innerWidth > innerHeight;
-      const dist = landscape ? 3.3 : 4.2;
+      // em retrato o menu é uma gaveta de ~60% da altura: a garota vai para o espaço livre de cima
+      const dist = landscape ? 3.3 : 5.9;
       const right = new THREE.Vector3(Math.cos(a), 0, -Math.sin(a));
       // em paisagem a garota fica à direita do painel; em retrato, acima dele
-      const look = new THREE.Vector3(0, landscape ? 0.85 : 0.35, 0).addScaledVector(right, landscape ? -0.75 : 0);
-      return [new THREE.Vector3(Math.sin(a) * dist, 1.05, Math.cos(a) * dist).addScaledVector(right, landscape ? -0.75 : 0), look];
+      const look = new THREE.Vector3(0, landscape ? 0.85 : -0.72, 0).addScaledVector(right, landscape ? -0.75 : 0);
+      return [new THREE.Vector3(Math.sin(a) * dist, landscape ? 1.05 : 1.0, Math.cos(a) * dist).addScaledVector(right, landscape ? -0.75 : 0), look];
     }
     if (!this.stage) return [this.camPos.clone(), this.camLook.clone()];
     if (shot === 'wide' || !this.girl || !this.man) {

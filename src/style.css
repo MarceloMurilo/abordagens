@@ -34,10 +34,22 @@ button.big { background: var(--pink); color: #fff; font-family: 'Lilita One', sa
 
 /* ---------- título ---------- */
 .screen { position: fixed; inset: 0; display: flex; align-items: center; padding: 16px; overflow-y: auto; }
-#title { justify-content: flex-start; padding-left: max(16px, 6vw); }
-.title-panel { width: min(430px, 100%); transform: rotate(-1deg); }
-.title-panel h1 { font-size: 54px; color: var(--pink); -webkit-text-stroke: 2px var(--ink); text-shadow: 4px 4px 0 var(--ink); line-height: 1; }
-.tag { color: var(--muted); margin: 6px 0 14px; line-height: 1.25; }
+#title { justify-content: flex-start; padding: 16px 16px 16px max(16px, 6vw); overflow: hidden; }
+.title-panel {
+  width: min(440px, 100%); max-height: calc(100dvh - 32px); transform: rotate(-1deg);
+  display: flex; flex-direction: column; padding: 0; overflow: hidden;
+}
+.title-head { padding: 20px 24px 4px; flex: 0 0 auto; }
+.title-body { padding: 4px 24px 8px; flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+.title-foot { padding: 4px 24px 16px; flex: 0 0 auto; border-top: 2px dashed rgba(24, 19, 28, .18); background: var(--paper); }
+.title-panel h1 { font-size: clamp(40px, 6vw, 56px); color: var(--pink); -webkit-text-stroke: 2px var(--ink); text-shadow: 4px 4px 0 var(--ink); line-height: 1; }
+.tag { color: var(--muted); margin: 6px 0 10px; line-height: 1.25; }
+.stats { display: flex; gap: 6px; flex-wrap: wrap; list-style: none; margin: 0 0 6px; padding: 0; }
+.stats li { background: var(--yellow); border: 2px solid var(--ink); border-radius: 999px; padding: 0 10px; font-size: 15px; box-shadow: 2px 2px 0 var(--ink); }
+.stats b { font-family: 'Lilita One', sans-serif; font-weight: 400; }
+.sec { font-size: 18px; margin: 12px 0 2px; }
+.opts { display: grid; grid-template-columns: 1fr; gap: 0 14px; }
+.field { margin: 8px 0 4px; }
 label { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
 input {
   font: inherit; border: 3px solid var(--ink); border-radius: 10px; padding: 6px 10px; background: #fff; flex: 1; min-width: 0;
@@ -158,10 +170,70 @@ input:focus { outline: none; box-shadow: 0 0 0 3px var(--yellow); }
 .reveal li.miss { opacity: .6; }
 .reveal .chosen { background: var(--pink); color: #fff; border-radius: 8px; padding: 0 8px; font-size: 15px; }
 
+.portrait.big { transition: transform .2s; }
+
+/* ---------- celular e tablet em pé: o menu vira uma gaveta embaixo, a personagem aparece em cima ---------- */
+@media (orientation: portrait) and (max-width: 900px) {
+  #title { align-items: flex-end; justify-content: center; padding: 0; }
+  .title-panel {
+    width: 100%; max-width: 560px; max-height: 60dvh; transform: none;
+    border-radius: 22px 22px 0 0; border-bottom: 0; box-shadow: 0 -4px 0 var(--ink);
+  }
+  .title-head { padding: 14px 18px 2px; }
+  .title-body { padding: 2px 18px 8px; }
+  .title-foot { padding: 8px 18px calc(12px + env(safe-area-inset-bottom)); }
+  .title-panel h1 { font-size: 38px; text-shadow: 3px 3px 0 var(--ink); }
+  .tag { font-size: 16px; margin: 4px 0 8px; }
+  .opts { grid-template-columns: 1fr 1fr; }
+  .opts .opt:first-child { grid-column: 1 / -1; }
+}
+
+/* ---------- celular deitado: painel compacto à esquerda ---------- */
+@media (orientation: landscape) and (max-height: 520px) {
+  #title { padding: 8px 8px 8px max(8px, env(safe-area-inset-left)); }
+  .title-panel { max-height: calc(100dvh - 16px); width: min(400px, 58vw); transform: none; }
+  .title-head { padding: 10px 16px 0; }
+  .title-panel h1 { font-size: 30px; text-shadow: 3px 3px 0 var(--ink); }
+  .title-head .tag, .stats { display: none; }
+  .title-body { padding: 0 16px 6px; }
+  .title-foot { padding: 6px 16px 8px; }
+  .title-foot .big { margin-top: 4px; font-size: 19px; padding: 6px 14px; }
+  .opts { grid-template-columns: 1fr 1fr; }
+  .opts .opt:first-child { grid-column: 1 / -1; }
+}
+
+/* ---------- telas largas: painel um pouco mais folgado ---------- */
+@media (min-width: 1200px) and (min-height: 700px) {
+  .title-panel { width: 480px; }
+}
+
 @media (max-width: 640px) {
   html, body { font-size: 17px; }
-  #title { padding-left: 16px; align-items: flex-end; }
-  .title-panel h1 { font-size: 42px; }
   .bubble .text { font-size: 19px; }
   #card h2 { font-size: 30px; }
+  #card { padding: 14px 20px; }
+  /* alvos de toque maiores */
+  .swatches button { width: 34px; height: 34px; }
+  .chips button { font-size: 16px; padding: 4px 10px; }
+  /* jogo: HUD e câmera mais enxutos */
+  #hud { top: calc(8px + env(safe-area-inset-top)); left: 10px; right: 10px; font-size: 15px; }
+  #hud span { padding: 1px 8px; }
+  #camctl { top: calc(42px + env(safe-area-inset-top)); right: 10px; gap: 4px; }
+  #camctl .cam-label { display: none; }
+  #camctl button { font-size: 14px; padding: 0 7px; }
+  #dialog { width: calc(100% - 20px); bottom: calc(8px + env(safe-area-inset-bottom)); }
+  .bubble { padding: 12px 14px; min-height: 64px; }
+  #say input { font-size: 17px; padding: 8px 10px; }
+  #say button { padding: 6px 10px; }
+  .actions button { font-size: 15px; padding: 4px 6px; }
+  #log { max-height: 18vh; }
+  /* escolha e final */
+  .screen { padding: 10px; }
+  .panel { padding: 16px; }
+  .panel.wide { margin: 8px auto; }
+  .cards { grid-template-columns: 1fr; }
+  #ending-body h2 { font-size: 30px; }
+  .portrait.big { width: 72px; height: 72px; }
+  .reveal h3 { font-size: 19px; flex-wrap: wrap; }
+  .score b { font-size: 26px; }
 }

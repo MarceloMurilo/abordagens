@@ -6,7 +6,7 @@ import OpenAI from 'openai';
 import { PERSONAS, personaById } from './personas';
 import { actorSchema, actorSystem, epilogoPrompt, epilogoSchema, momentoAtual, type Jogadora } from './prompts';
 import { chaveDoJogador, limiteDeUso, originGuard, securityHeaders } from './guard';
-import { SCENES, SCENE_ORDER, type SceneId } from '../shared/scenes';
+import { RUN_SIZE, SCENES, SCENE_ORDER, type SceneId } from '../shared/scenes';
 import type { Encontro, EncontroFeito, Fala, Final, Turno } from '../shared/types';
 
 const MODEL = process.env.OPENAI_MODEL || 'gpt-5.6-luna';
@@ -94,10 +94,11 @@ app.post('/api/check-key', async (req, res) => {
   }
 });
 
-// Sorteia um homem por cena, preferindo quem combina com o lugar.
+// Sorteia RUN_SIZE lugares (na ordem do dia) e um homem por lugar, preferindo quem combina com ele.
 app.post('/api/run', (_req, res) => {
   const livres = shuffle(PERSONAS);
-  const encontros: Encontro[] = SCENE_ORDER.map((cenaId) => {
+  const sorteadas = new Set(shuffle(SCENE_ORDER).slice(0, RUN_SIZE));
+  const encontros: Encontro[] = SCENE_ORDER.filter((c) => sorteadas.has(c)).map((cenaId) => {
     const i = Math.max(0, livres.findIndex((p) => p.cenasFavoritas.includes(cenaId)));
     const [p] = livres.splice(i, 1);
     return { personaId: p.id, cenaId, look: p.look };
@@ -133,7 +134,7 @@ app.post('/api/turn', async (req, res) => {
 
 app.post('/api/ending', async (req, res) => {
   const ela = limparJogadora(req.body?.jogadora);
-  const encontros: EncontroFeito[] = Array.isArray(req.body?.encontros) ? req.body.encontros.slice(0, SCENE_ORDER.length) : [];
+  const encontros: EncontroFeito[] = Array.isArray(req.body?.encontros) ? req.body.encontros.slice(0, RUN_SIZE) : [];
   const conhecidos = encontros.map((e) => ({ e, p: personaById(String(e?.personaId))! })).filter((x) => x.p);
 
   let total = 0, percebidos = 0;

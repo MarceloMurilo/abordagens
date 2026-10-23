@@ -2,7 +2,9 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content" />
+  <meta name="theme-color" content="#f6e7cf" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%92%AC%3C/text%3E%3C/svg%3E" />
   <title>Abordagens</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Patrick+Hand&display=swap" rel="stylesheet" />
@@ -14,22 +16,32 @@
 
   <section id="title" class="screen">
     <div class="panel title-panel">
-      <h1>Abordagens</h1>
-      <p class="tag">Um sábado. Cinco lugares. Cinco homens tentando a sorte.<br />Converse, perceba quem eles realmente são, e escolha bem.</p>
-      <label>Seu nome <input id="f-nome" maxlength="20" value="Bia" /></label>
-      <div class="opt"><span>Cabelo</span><div id="f-estilo" class="chips"></div></div>
-      <div class="opt"><span>Cor do cabelo</span><div id="f-cabelo" class="swatches"></div></div>
-      <div class="opt"><span>Pele</span><div id="f-pele" class="swatches"></div></div>
-      <div class="opt"><span>Roupa</span><div id="f-roupa" class="chips"></div></div>
-      <div class="opt"><span>Cor da roupa</span><div id="f-cor" class="swatches"></div></div>
-      <details id="keybox" class="keybox">
-        <summary>🔑 <span id="key-title">Usar minha chave da OpenAI <small>(opcional)</small></span></summary>
-        <input id="f-key" type="password" autocomplete="off" spellcheck="false" placeholder="sk-..." />
-        <label class="check"><input id="f-lembrar" type="checkbox" /> lembrar neste navegador</label>
-        <p class="hint">A chave fica só no seu navegador e é usada apenas para falar com a IA durante o jogo. O servidor não salva nem registra.</p>
-      </details>
-      <button id="start" class="big">Começar o sábado →</button>
-      <p class="err" id="start-err"></p>
+      <header class="title-head">
+        <h1>Abordagens</h1>
+        <p class="tag">Um sábado comum. Quatro desconhecidos puxam conversa. Descubra quem eles são de verdade e escolha bem.</p>
+        <ul class="stats"><li><b>21</b> tipos de homem</li><li><b>10</b> lugares</li><li><b>4</b> por sábado</li></ul>
+      </header>
+      <div class="title-body">
+        <label class="field">Seu nome <input id="f-nome" maxlength="20" value="Bia" autocomplete="given-name" /></label>
+        <h3 class="sec">Seu visual</h3>
+        <div class="opts">
+          <div class="opt"><span>Cabelo</span><div id="f-estilo" class="chips"></div></div>
+          <div class="opt"><span>Cor do cabelo</span><div id="f-cabelo" class="swatches"></div></div>
+          <div class="opt"><span>Pele</span><div id="f-pele" class="swatches"></div></div>
+          <div class="opt"><span>Roupa</span><div id="f-roupa" class="chips"></div></div>
+          <div class="opt"><span>Cor da roupa</span><div id="f-cor" class="swatches"></div></div>
+        </div>
+        <details id="keybox" class="keybox">
+          <summary>🔑 <span id="key-title">Usar minha chave da OpenAI <small>(opcional)</small></span></summary>
+          <input id="f-key" type="password" autocomplete="off" spellcheck="false" placeholder="sk-..." />
+          <label class="check"><input id="f-lembrar" type="checkbox" /> lembrar neste navegador</label>
+          <p class="hint">A chave fica só no seu navegador e é usada apenas para falar com a IA durante o jogo. O servidor não salva nem registra.</p>
+        </details>
+      </div>
+      <footer class="title-foot">
+        <button id="start" class="big">Começar o sábado →</button>
+        <p class="err" id="start-err"></p>
+      </footer>
     </div>
   </section>
 

@@ -337,7 +337,7 @@ function chooseDate(): Promise<string | null> {
   });
 }
 
-const DO_LUGAR: Record<SceneId, string> = { cafe: 'do café', livraria: 'da livraria', parque: 'do parque', academia: 'da academia', rooftop: 'do rooftop' };
+const DO_LUGAR = Object.fromEntries(Object.entries(SCENES).map(([id, c]) => [id, c.doLugar])) as Record<SceneId, string>;
 
 // Como a jogadora conhece cada um: pelo nome, se ele disse, ou pelo lugar.
 const apelido = (personaId?: string) => {
@@ -346,7 +346,10 @@ const apelido = (personaId?: string) => {
 };
 
 // Cor de fundo de cada lugar (a mesma do cenário) para o retrato.
-const FUNDO: Record<SceneId, string> = { cafe: '#f6e7cf', livraria: '#efe0c6', parque: '#cdebff', academia: '#e6e9ee', rooftop: '#1b2045' };
+const FUNDO: Record<SceneId, string> = {
+  feira: '#d6ecff', cafe: '#f6e7cf', lavanderia: '#e3f4f1', livraria: '#efe0c6', praia: '#bfe6ff',
+  parque: '#cdebff', museu: '#efe9df', academia: '#e6e9ee', metro: '#20232b', rooftop: '#1b2045',
+};
 const retratos = new Map<string, string>();
 
 function retratoImg(f: EncontroFeito, cls = 'portrait') {
