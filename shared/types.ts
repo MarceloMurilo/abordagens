@@ -31,7 +31,11 @@ export interface Look {
 
 export interface Fala { de: 'ela' | 'ele'; texto: string }
 
+/** Como a IA leu a última fala da jogadora: dirige a expressão e o gesto da personagem dela. */
+export interface TomDela { tom: string; emocao: Emocao; gesto: Gesto }
+
 export interface Turno {
+  tom_dela: TomDela;
   fala: string;
   emocao: Emocao;
   gesto: Gesto;

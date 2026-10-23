@@ -122,6 +122,7 @@ app.post('/api/turn', async (req, res) => {
   try {
     const t = await gerarJSON<Turno>(clienteDa(req), input, 'turno', actorSchema(p));
     t.interesse = Math.max(0, Math.min(100, Math.round(t.interesse)));
+    t.tom_dela.tom = String(t.tom_dela.tom ?? '').slice(0, 30);
     // Só revela o nome se ele realmente aparece na fala (não confia só na marcação do modelo).
     const primeiro = p.nome.split(' ')[0];
     t.disse_nome = new RegExp(`\\b${semAcento(primeiro)}\\b`, 'i').test(semAcento(t.fala));

@@ -110,6 +110,11 @@ input:focus { outline: none; box-shadow: 0 0 0 3px var(--yellow); }
 #log .l { align-self: flex-start; background: rgba(255, 250, 242, .88); border: 2px solid var(--ink); border-radius: 10px; padding: 2px 10px; font-size: 16px; max-width: 85%; }
 #log .l.ela { align-self: flex-end; background: rgba(255, 214, 224, .92); }
 #log .l.acao { font-style: italic; color: var(--muted); }
+.tom {
+  align-self: flex-end; margin: 0 6px 18px 0; background: var(--pink-d); color: #fff; border: 2px solid var(--ink);
+  border-radius: 999px; padding: 0 10px; font-size: 15px; box-shadow: 2px 2px 0 var(--ink); animation: pop-tom .35s cubic-bezier(.3, 1.6, .5, 1);
+}
+@keyframes pop-tom { from { transform: scale(.6); opacity: 0; } }
 .bubble { position: relative; background: var(--paper); border: 3px solid var(--ink); border-radius: 18px; box-shadow: 5px 5px 0 var(--ink); padding: 14px 18px 14px; min-height: 84px; }
 .bubble .who { position: absolute; top: -16px; left: 16px; background: var(--ink); color: #fff; padding: 1px 12px; border-radius: 8px; font-family: 'Lilita One', sans-serif; font-size: 17px; }
 .bubble.ela .who { background: var(--pink-d); }

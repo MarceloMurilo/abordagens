@@ -3,7 +3,7 @@ import { portrait } from './scene/portrait';
 import { SCENES, type SceneId } from '../shared/scenes';
 import {
   ACAO_DISPENSAR, ACAO_NUMERO,
-  type Emocao, type Encontro, type EncontroFeito, type Final, type HairStyle, type Look, type Turno,
+  type Emocao, type Encontro, type EncontroFeito, type Final, type Gesto, type HairStyle, type Look, type TomDela, type Turno,
 } from '../shared/types';
 
 const $ = <T extends HTMLElement = HTMLElement>(s: string) => document.querySelector(s) as T;
@@ -191,8 +191,30 @@ form.addEventListener('submit', (e) => { e.preventDefault(); const v = input.val
 btnNum.onclick = () => answer(ACAO_NUMERO);
 btnBye.onclick = () => answer(ACAO_DISPENSAR);
 
-// Reação da garota ao humor dele: dá vida à cena sem decidir por você.
+// Reação da garota ao humor dele: só na abordagem, antes de ela falar qualquer coisa.
 const REACAO: Partial<Record<Emocao, Emocao>> = { rindo: 'rindo', feliz: 'feliz', flertando: 'timido', confiante: 'feliz', irritado: 'surpreso', triste: 'triste', surpreso: 'surpreso', nervoso: 'feliz' };
+
+// Leitura instantânea do tom dela, para a personagem reagir na hora; a IA refina quando responde.
+function tomLocal(f: string): { emocao: Emocao; gesto: Gesto } | null {
+  const s = f.toLowerCase();
+  if (/k{3,}|haha|hehe|rsrs|😂|🤣|\[ri/.test(s)) return { emocao: 'rindo', gesto: 'rir' };
+  if (/🙄|aff|\[revir|tá bom\.?$|ok\.?$|sei\.{2,}/.test(s)) return { emocao: 'irritado', gesto: 'ombros' };
+  if (/😍|🥰|❤|😊|fofo|que lindo/.test(s)) return { emocao: 'timido', gesto: 'mao_no_peito' };
+  if (/\?{2,}|como assim|sério\?|oi\?|😮|😳/.test(s)) return { emocao: 'surpreso', gesto: 'inclinar' };
+  if (/😏|😉|será\?/.test(s)) return { emocao: 'flertando', gesto: 'inclinar' };
+  if (/!$|amei|adoro|demais/.test(s)) return { emocao: 'feliz', gesto: 'nenhum' };
+  return null;
+}
+
+const EMOJI: Record<Emocao, string> = { neutro: '🙂', feliz: '😊', rindo: '😂', nervoso: '😬', timido: '😳', confiante: '😎', flertando: '😏', irritado: '😒', triste: '😔', surpreso: '😮' };
+const tomEl = $('#tom');
+function mostrarTom(t?: TomDela) {
+  if (!t || !t.tom || t.tom === '—') { tomEl.classList.add('hidden'); return; }
+  tomEl.textContent = `${EMOJI[t.emocao] ?? '🙂'} você soou ${t.tom}`;
+  tomEl.classList.remove('hidden');
+  // reinicia a animação de "pop"
+  tomEl.style.animation = 'none'; void tomEl.offsetWidth; tomEl.style.animation = '';
+}
 
 // ---------------- encontro ----------------
 
@@ -217,6 +239,7 @@ async function runEncounter(enc: Encontro, i: number, total: number) {
   card.querySelector('p')!.textContent = cena.intro;
   card.classList.remove('hidden');
   log.innerHTML = '';
+  mostrarTom();
   pendingLog = null;
 
   const walk = man.walkTo(stage.man.path.slice(1));
@@ -258,11 +281,19 @@ async function runEncounter(enc: Encontro, i: number, total: number) {
     feito.interesseFinal = t.interesse;
     for (const r of t.revelou) if (!feito.revelados.includes(r)) feito.revelados.push(r);
     if (t.nome) feito.nome = t.nome;
+    const elaFalou = feito.historico.some((h) => h.de === 'ela');
+    if (elaFalou && t.tom_dela) {
+      // a personagem dela age como a IA leu o tom, e só então ele responde
+      girl.emocao = t.tom_dela.emocao;
+      girl.play(t.tom_dela.gesto);
+      mostrarTom(t.tom_dela);
+      if (t.tom_dela.gesto !== 'nenhum') await sleep(700);
+    }
     world.setShot('him');
     man.emocao = t.emocao;
     man.play(t.gesto);
     man.say(Math.min(6, 0.6 + t.fala.length * 0.045));
-    girl.emocao = REACAO[t.emocao] ?? 'neutro';
+    if (!elaFalou) girl.emocao = REACAO[t.emocao] ?? 'neutro';
     addLog('ele', `${nomeDele()}: ${t.fala}`);
     await showLine(nomeDele(), t.fala, false);
     btnNum.classList.toggle('pulse', t.acao === 'pedir_numero');
@@ -285,6 +316,9 @@ async function runEncounter(enc: Encontro, i: number, total: number) {
     } else {
       addLog('ela', fala);
       girl.say(Math.min(5, 0.5 + fala.length * 0.045));
+      mostrarTom();
+      const rapido = tomLocal(fala);
+      if (rapido) { girl.emocao = rapido.emocao; girl.play(rapido.gesto); }
       world.setShot('her');
       void showLine(jogadora.nome, fala, true);
     }
