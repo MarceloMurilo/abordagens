@@ -54,3 +54,12 @@ Configure também um limite de gasto no painel da OpenAI: é a única trava que 
 ### Front e back separados (opcional)
 
 Front estático (Vercel, Netlify, Cloudflare Pages, GitHub Pages) com `VITE_API_URL=https://seu-backend` no build, e no backend `ALLOWED_ORIGINS=https://seu-front`.
+
+### Onde está no ar
+
+- Front: https://abordagens-amber.vercel.app (Vercel, deploy a cada push na `main`)
+- API: https://abordagens-api.163-176-241-223.sslip.io, na VM `projetos` da Oracle Cloud (Always Free, São Paulo, compartimento próprio, separada do Rejogy)
+  - Roda como serviço systemd `abordagens` atrás do Caddy (HTTPS automático); o `.env` fica em `/srv/apps/abordagens/.env`
+  - Modo "só chave do jogador" (`ALLOW_SERVER_KEY=false`): o servidor não guarda chave nenhuma
+  - Deploy: um timer confere o GitHub a cada 2 minutos e reinicia se tiver commit novo (`journalctl -u deploy-abordagens`)
+  - Novo projeto na mesma VM: clone em `/srv/apps/<nome>`, crie um serviço systemd numa porta livre e um arquivo em `/etc/caddy/sites/`
