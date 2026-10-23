@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Abordagens</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Patrick+Hand&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <canvas id="c"></canvas>
+  <div id="paper"></div>
+
+  <section id="title" class="screen">
+    <div class="panel title-panel">
+      <h1>Abordagens</h1>
+      <p class="tag">Um sábado. Cinco lugares. Cinco homens tentando a sorte.<br />Converse, perceba quem eles realmente são, e escolha bem.</p>
+      <label>Seu nome <input id="f-nome" maxlength="20" value="Bia" /></label>
+      <div class="opt"><span>Cabelo</span><div id="f-estilo" class="chips"></div></div>
+      <div class="opt"><span>Cor do cabelo</span><div id="f-cabelo" class="swatches"></div></div>
+      <div class="opt"><span>Pele</span><div id="f-pele" class="swatches"></div></div>
+      <div class="opt"><span>Roupa</span><div id="f-roupa" class="chips"></div></div>
+      <div class="opt"><span>Cor da roupa</span><div id="f-cor" class="swatches"></div></div>
+      <details id="keybox" class="keybox">
+        <summary>🔑 <span id="key-title">Usar minha chave da OpenAI <small>(opcional)</small></span></summary>
+        <input id="f-key" type="password" autocomplete="off" spellcheck="false" placeholder="sk-..." />
+        <label class="check"><input id="f-lembrar" type="checkbox" /> lembrar neste navegador</label>
+        <p class="hint">A chave fica só no seu navegador e é usada apenas para falar com a IA durante o jogo. O servidor não salva nem registra.</p>
+      </details>
+      <button id="start" class="big">Começar o sábado →</button>
+      <p class="err" id="start-err"></p>
+    </div>
+  </section>
+
+  <div id="card" class="hidden">
+    <div class="time"></div>
+    <h2></h2>
+    <p></p>
+  </div>
+
+  <div id="hud" class="hidden"><span id="hud-scene"></span><span id="hud-count"></span></div>
+
+  <div id="camctl" class="hidden">
+    <span class="cam-label">🎥</span>
+    <button type="button" data-cam="auto" class="on" title="A câmera segue a conversa">Auto</button>
+    <button type="button" data-cam="him" title="Focar nele">Ele</button>
+    <button type="button" data-cam="her" title="Focar em você">Eu</button>
+    <button type="button" data-cam="wide" title="Plano geral">Geral</button>
+    <button type="button" data-cam="reset" title="Desfazer giro e zoom">↺</button>
+    <small>arraste para girar · roda para zoom</small>
+  </div>
+
+  <div id="dialog" class="hidden">
+    <div id="log"></div>
+    <div class="bubble">
+      <div class="who"></div>
+      <div class="text"></div>
+    </div>
+    <form id="say">
+      <input id="msg" autocomplete="off" maxlength="300" placeholder="Responda do seu jeito..." />
+      <button type="submit">Enviar</button>
+    </form>
+    <div class="actions">
+      <button id="btn-num" type="button">📱 Dar meu número</button>
+      <button id="btn-bye" type="button">✋ Dispensar</button>
+    </div>
+  </div>
+
+  <section id="choice" class="screen hidden">
+    <div class="panel wide">
+      <h2>Fim do sábado</h2>
+      <p class="tag">Você está em casa, de pijama, pensando no dia. Com quem você quer sair?</p>
+      <div id="choice-list" class="cards"></div>
+    </div>
+  </section>
+
+  <section id="ending" class="screen hidden">
+    <div class="panel wide">
+      <div id="ending-body"></div>
+      <button id="again" class="big">Jogar outro sábado ↻</button>
+    </div>
+  </section>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
