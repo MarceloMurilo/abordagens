@@ -323,7 +323,7 @@ function chooseDate(): Promise<string | null> {
     for (const f of feitos) {
       const cena = SCENES[f.cenaId as SceneId];
       const b = document.createElement('button');
-      b.innerHTML = `${retratoImg(f)}<b>${f.nome ?? `O desconhecido ${DO_LUGAR[f.cenaId as SceneId]}`}</b><small>${f.nome ? '' : 'nunca disse o nome · '}${cena.nome} · ${cena.horario.split(', ')[1]}</small>
+      b.innerHTML = `${retratoImg(f)}<b>${f.nome ? esc(f.nome) : `O desconhecido ${DO_LUGAR[f.cenaId as SceneId]}`}</b><small>${f.nome ? '' : 'nunca disse o nome · '}${cena.nome} · ${cena.horario.split(', ')[1]}</small>
         <small>${f.historico.filter((h) => h.de === 'ela').length} falas suas</small>
         ${f.deuNumero ? '<span class="badge">tem seu número</span>' : ''}`;
       b.onclick = () => resolve(f.personaId);
